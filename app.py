@@ -1,7 +1,6 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.models import load_model
 import cv2
 from PIL import Image
 import os
@@ -11,18 +10,18 @@ st.set_page_config(page_title="Klasifikasi Lumpy Skin", layout="centered")
 st.title("Klasifikasi Penyakit Lumpy Skin pada Sapi")
 
 # Load Model
-MODEL_PATH = "best_model_fixed.h5"
+MODEL_PATH = "best_model_tf2"
 model = None
 
 if os.path.exists(MODEL_PATH):
     try:
-        model = load_model(MODEL_PATH, compile=False)  # compile=False untuk menghindari error versi
+        model = tf.keras.models.load_model(MODEL_PATH)  # load model dari folder
         st.success("✅ Model berhasil dimuat.")
     except Exception as e:
         st.error("❌ Gagal memuat model:")
         st.exception(e)
 else:
-    st.error("❌ File model tidak ditemukan.")
+    st.error("❌ Folder model tidak ditemukan.")
 
 # Preprocessing Function
 def apply_clahe(cv_img):
@@ -42,7 +41,7 @@ def preprocess_image(image):
     img_gray = cv2.cvtColor(img_clahe, cv2.COLOR_BGR2GRAY)
     img_scaled = img_gray.astype(np.float32)
     img_scaled = img_scaled / 127.5 - 1.0
-    img_input = np.expand_dims(img_scaled, axis=(0, -1))
+    img_input = np.expand_dims(img_scaled, axis=(0, -1))  # (1, 224, 224, 1)
     return img_input
 
 # Upload Image
