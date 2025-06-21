@@ -3,5 +3,5 @@ Pillow
 python-dotenv
 tensorflow==2.9.3
 numpy==1.23.0
-opencv-python-headless==4.5.5.64
+opencv-python-headless
 
