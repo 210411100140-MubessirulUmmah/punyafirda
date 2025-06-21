@@ -1,6 +1,8 @@
 streamlit
-tensorflow==2.11.0
 opencv-python
 numpy
 Pillow
 python-dotenv
+tensorflow==2.9.3
+numpy==1.23.0
+Pillow
