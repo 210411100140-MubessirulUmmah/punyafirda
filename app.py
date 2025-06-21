@@ -18,8 +18,7 @@ if os.path.exists(MODEL_PATH):
         model = tf.saved_model.load(MODEL_PATH)
         infer = model.signatures["serving_default"]
         st.success("✅ Model berhasil dimuat.")
-        st.text("Model Input Signature:")
-        st.text(infer.structured_input_signature)
+        
     except Exception as e:
         st.error("❌ Gagal memuat model:")
         st.exception(e)
