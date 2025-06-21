@@ -8,7 +8,7 @@ import os
 
 
 # Load Model 
-MODEL_PATH = "C:/SKRIPSI/streamlit/best_model_fixed.h5"
+MODEL_PATH = "best_model_fixed.h5"
 model = None
 # st.write("File exists:", os.path.exists(MODEL_PATH))
 
