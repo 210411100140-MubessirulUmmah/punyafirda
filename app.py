@@ -9,13 +9,15 @@ st.set_page_config(page_title="Klasifikasi Lumpy Skin", layout="centered")
 
 st.title("Klasifikasi Penyakit Lumpy Skin pada Sapi")
 
-# Load Model
+# Load Model (SavedModel format)
 MODEL_PATH = "best_model_tf2"
 model = None
+infer = None
 
 if os.path.exists(MODEL_PATH):
     try:
-        model = tf.keras.models.load_model(MODEL_PATH)  # load model dari folder
+        model = tf.saved_model.load(MODEL_PATH)
+        infer = model.signatures["serving_default"]
         st.success("✅ Model berhasil dimuat.")
     except Exception as e:
         st.error("❌ Gagal memuat model:")
@@ -48,14 +50,18 @@ def preprocess_image(image):
 uploaded_file = st.file_uploader("📤 Upload Gambar Sapi", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    st.image(uploaded_file, caption="🖼️ Gambar yang Diupload", use_column_width=True)
+    st.image(uploaded_file, caption="🖼️ Gambar yang Diupload", use_container_width=True)
 
     image = Image.open(uploaded_file).convert("RGB")
     processed_image = preprocess_image(image)
 
-    if model:
+    if infer:
         with st.spinner("🔍 Melakukan prediksi..."):
-            pred_prob = model.predict(processed_image)[0][0]
+            input_tensor = tf.convert_to_tensor(processed_image)
+            result = infer(input_tensor)
+            output_key = list(result.keys())[0]  # Biasanya 'output_1'
+            pred_prob = result[output_key].numpy()[0][0]
+
             predicted_label = "Lumpy Skin" if pred_prob > 0.5 else "Normal Skin"
             confidence = pred_prob if pred_prob > 0.5 else 1 - pred_prob
 
