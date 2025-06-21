@@ -9,7 +9,7 @@ st.set_page_config(page_title="Klasifikasi Lumpy Skin", layout="centered")
 st.title("Klasifikasi Penyakit Lumpy Skin pada Sapi")
 
 # Load Model
-MODEL_PATH = "best_model_tf"
+MODEL_PATH = "best_model_tf2"
 model = None
 infer = None
 
